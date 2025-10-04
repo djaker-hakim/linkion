@@ -1,0 +1,25 @@
+{
+    "name": "djaker-hakim/linkion",
+    "description": "relation between backend and frontend",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "hakim",
+            "email": "hakiltheknight@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Linkion\\": "src/"
+        }
+    },
+    "extra": {
+    "laravel": {
+        "providers": [
+            "Linkion\\LinkionServiceProvider"
+            ]
+        }
+    }
+}
