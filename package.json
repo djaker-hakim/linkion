@@ -1,0 +1,22 @@
+{
+  "name": "linkion",
+  "version": "0.0.1",
+  "description": "relation between backend and frontend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/djaker-hakim/linkion.git"
+  },
+  "author": "hakim",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/djaker-hakim/linkion/issues"
+  },
+  "homepage": "https://github.com/djaker-hakim/linkion#readme",
+  "dependencies": {
+    "alpinejs": "^3.15.0"
+  }
+}

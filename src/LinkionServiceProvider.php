@@ -3,6 +3,7 @@
 namespace Linkion;
 
 use Illuminate\Support\ServiceProvider;
+use Linkion\Core\Linkion;
 
 class LinkionServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,7 @@ class LinkionServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        
+        $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
     }
 }
