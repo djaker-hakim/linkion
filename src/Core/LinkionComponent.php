@@ -13,23 +13,16 @@ class LinkionComponent extends Component
     public $_id;
     public $_data;
 
+    public $componentCached=true;
+
 
     /**
      * Create a new component instance.
      */
     public function __construct()
     {
-        $this->init();
-    }
-
-    public function init(){
         
     }
-
-    
-
-
-
 
     protected function component($view){
 

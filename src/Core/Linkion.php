@@ -9,7 +9,7 @@ class Linkion extends BaseLinkion {
 
     use LinkionUpload;
 
-    protected $component;
+    public $component;
 
     protected ReflectionClass $reflector;
 

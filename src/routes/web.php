@@ -56,8 +56,15 @@ Route::post('/linkion/connection', function (Request $request) {
     if(!empty($methods)){
         $result = $linkion->run($methods['method'], $methods['args']);
     }
+    $template = null;
+    if($actions == 'render' || !$linkion->component->componentCached){
+        $template = $linkion->run('render')
+        ->with($linkion->component->data())
+        ->render();
+    }
+        
     $newProps = $linkion->getProps();
         
-    return json_encode(['props' => $newProps, 'result' => $result ]);
+    return json_encode(['props' => $newProps,'template' => $template ,'result' => $result ]);
 
 })->middleware('web');

@@ -1,10 +1,10 @@
 
 
 export const apiCallTrait = {
-    async call(component, method, args = []){
-
+    async call(name, method, args = []){
+        const component = this.get(name);
         const train = { 
-            props: this.get(component),
+            props: component,
             methods: {
                 method: method,
                 args: args
@@ -14,9 +14,14 @@ export const apiCallTrait = {
         try{
             const data = await this.fetch(train);
             this.updateComponent(data.props);
+            if(!component.componentCached || data.template){
+                this.renderTemplate(component, data.template);
+            } 
             return data.result; 
         } catch(e) {
-            return e
+            console.error(e);
+            return e;
         }
     },
+    
 }
