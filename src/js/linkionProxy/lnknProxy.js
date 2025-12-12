@@ -18,7 +18,11 @@ export function linkionProxy(linkion){
                     // reRendering the component
                     if(method === 'render'){
                         return (...args) => target.render(component, ...args);
-                    } 
+                    }
+                    //uploading the file
+                    if(method === 'upload'){
+                        return (...args) => target.fileUpload(component, ...args);
+                    }
                     return (...args) => target.call(component, method, args);
                 }
             });
@@ -26,6 +30,10 @@ export function linkionProxy(linkion){
 
         return new Proxy({}, {
             get(_, method){
+                //uploading the file
+                // if(method === 'upload'){
+                //     return (...args) => target.fileUpload(toDotted(component), ...args);
+                // }
                 // rendering the component
                 if(method === 'render'){
                     return (...args) => target.render(toDotted(component), ...args);

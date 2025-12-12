@@ -5,13 +5,16 @@ export const apiUploadTrait = {
     loading: false,
 
     fileUpload(name, prop, files){
+        
         const xhr = new XMLHttpRequest;
         const formData = new FormData;
+        const component = this.get(name);
 
         formData.append('actions', 'upload');
+        formData.append('_token', this.getToken()); // important for 419 fix
         formData.append('props', JSON.stringify({
-            componentName: name,
-            prop: prop
+            componentName: component ? component.componentName : name ,
+            prop: prop 
         }));
         
         if(files instanceof FileList){
@@ -24,7 +27,7 @@ export const apiUploadTrait = {
 
 
         xhr.open("POST", this.url);
-
+        
         xhr.setRequestHeader("X-CSRF-TOKEN", this.getToken());
 
         xhr.onloadstart = () => {
@@ -34,7 +37,11 @@ export const apiUploadTrait = {
         xhr.upload.addEventListener('progress', (e) => {
             if(e.lengthComputable) {
                 this.progress = Math.round((e.loaded / e.total) * 100);
-                this.emit('upload-progress', { progress: this.progress, componentName: name });
+                this.emit('upload-progress', 
+                    { 
+                        progress: this.progress,
+                        component: component ? component : { componentName: name } 
+                    });
             }
         });
 
