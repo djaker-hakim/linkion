@@ -25,6 +25,7 @@ Route::post('/linkion/connection', function (Request $request) {
     $props = $request->props;
     $methods = $request->methods ?? [];
 
+    // upload a file 
     if($actions == 'upload'){
         $props = json_decode($props, true);
         $files = $request->file($props['prop']);
@@ -52,10 +53,11 @@ Route::post('/linkion/connection', function (Request $request) {
     
     // run the logic
     $result = null;
-    
     if(!empty($methods)){
         $result = $linkion->run($methods['method'], $methods['args']);
     }
+
+    // render the template
     $template = null;
     if($actions == 'render' || !$linkion->component->componentCached){
         $template = $linkion->run('render')

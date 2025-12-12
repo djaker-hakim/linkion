@@ -1,10 +1,12 @@
 
 
-import "./linkion-script"
+// import "./linkion-script"
 import Alpine from 'alpinejs'
+import { Linkion } from './Linkion'
+import { linkionProxy } from './linkionProxy/lnknProxy';
 
-// window.Alpine = Alpine;
+window.linkion = linkionProxy(new Linkion());
 
-// document.addEventListener('linkion:ready', () => {
-//     Alpine.start();
-// })
+queueMicrotask(() => {
+    window.linkion.start();
+});
