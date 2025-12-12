@@ -65,7 +65,7 @@ export const coreTrait = {
         if(this.components.has(name)) return this.components.get(name);
         let comp = {};
         if((comp = this.getComponentByProp('componentName', name)) ||
-        (comp = this.getComponentByProp('id', name))) return comp;
+        (comp = this.getComponentByProp('ref', name))) return comp;
         return null;                               
     },
 
@@ -83,7 +83,7 @@ export const coreTrait = {
 
     has(name){
         return this.components.has(name) && 
-        (this.getComponentByProp( 'componentName' ,name) || this.getComponentByProp( 'id' ,name));   
+        (this.getComponentByProp( 'componentName' ,name) || this.getComponentByProp( 'ref' ,name));   
     },
 
     cleanInactiveComponents(){
