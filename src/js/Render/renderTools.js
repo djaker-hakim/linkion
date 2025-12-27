@@ -38,7 +38,7 @@ export const renderTrait = {
             return data.result; 
         } catch(e) {
             console.error(e);
-            return e
+            return e;
         }
     },
 

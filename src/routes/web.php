@@ -18,6 +18,18 @@ Route::get('/linkion/script', function () {
     
 });
 
+Route::get('/linkionWithAlpine/script', function () {
+    
+    $file = dirname(__DIR__).'/js/main.alpine.min.js';
+    abort_unless(file_exists($file), 404);
+
+    return response()->file($file, [
+        'Content-Type' => 'application/javascript',
+        // 'Cache-Control' => 'public, max-age=604800',
+    ]);
+    
+});
+
 Route::post('/linkion/connection', function (Request $request) {
     
     $linkion = new Linkion;

@@ -77,6 +77,15 @@ export const coreTrait = {
         return this.list.filter((component) => component[prop] == value );
     },
 
+    getCurrentComponent(el){
+        if (!el || el.nodeType !== 1) return null
+
+        const root = el.closest('[lnkn-id]');
+        if(root) return this.getComponentByProp('_id' ,root.getAttribute('lnkn-id'));
+        return null;
+
+    },
+
     removeComponentByProp(prop, value){
         this.list = this.list.filter((component) => component[prop] != value );
     },
