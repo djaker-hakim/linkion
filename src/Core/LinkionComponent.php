@@ -13,6 +13,8 @@ class LinkionComponent extends Component
     public $_id;
     public $_data;
 
+    public $ref;
+
     public $componentCached=true;
 
 

@@ -7,7 +7,7 @@ export const coreTrait = {
 
     // event dispatcher
     emit(event, detail = {}) {
-        document.dispatchEvent(new CustomEvent(event, { detail }));
+        document.dispatchEvent(new CustomEvent(event, { detail: detail, bubbles: true }));
     },
 
     // Main init method
