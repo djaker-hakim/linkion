@@ -78,7 +78,16 @@ Route::post('/linkion/connection', function (Request $request) {
     }
         
     $newProps = $linkion->getProps();
+
+    // check for dispatched events
+    $events = $linkion->getDispatchedEvents();
+
         
-    return json_encode(['props' => $newProps,'template' => $template ,'result' => $result ]);
+    return json_encode([
+        'props' => $newProps,
+        'events' => $events,
+        'template' => $template ,
+        'result' => $result 
+    ]);
 
 })->middleware('web');

@@ -54,6 +54,19 @@ class LinkionComponent extends Component
         return $props;
     }
 
+    protected $events;
+
+    protected function dispatch($event, $detail = []){
+        $this->events[] = [
+            "name" => $event,
+            "detail" => $detail
+        ];
+    }
+
+    public function getEvents(){
+        return $this->events;
+    }
+
     public function render(){}
 
 }

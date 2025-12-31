@@ -5,6 +5,7 @@ import { apiCallTrait } from './ApiCalls/apiCall';
 import { apiUploadTrait } from './ApiCalls/apiUpload';
 import { renderTrait } from './Render/renderTools';
 import { assetsAndScriptsTrait } from './Render/assetsAndScripts';
+import { eventsTrait } from './eventsAndListeners/events';
 
 export class Linkion {
     static traits = [
@@ -14,7 +15,8 @@ export class Linkion {
         apiLoadTrait,
         apiUploadTrait,
         renderTrait,
-        assetsAndScriptsTrait
+        assetsAndScriptsTrait,
+        eventsTrait
     ];
 
     static register(...traits){

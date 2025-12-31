@@ -74,5 +74,9 @@ class Linkion extends BaseLinkion {
         return $this->component->$method(...$args);
     }
 
+    public function getDispatchedEvents(){
+        return $this->component->getEvents();
+    }
+
     
 }

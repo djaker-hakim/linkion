@@ -13,6 +13,7 @@ export const apiCallTrait = {
         };
         try{
             const data = await this.fetch(train);
+            this.handleEvents(data.events);
             this.updateComponent(data.props);
             if(!component.componentCached || data.template){
                 this.renderTemplate(component, data.template);
@@ -22,6 +23,5 @@ export const apiCallTrait = {
             console.error(e);
             return e;
         }
-    },
-    
+    },    
 }
