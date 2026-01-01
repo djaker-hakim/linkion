@@ -1,8 +1,8 @@
 <?php
 
+use App\View\Components\dashboard\user;
 use App\View\Components\Test;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Linkion\Core\Linkion;
 
@@ -31,11 +31,17 @@ Route::get('/linkionWithAlpine/script', function () {
 });
 
 Route::post('/linkion/connection', function (Request $request) {
-    
+
+        
     $linkion = new Linkion;
     $actions = $request->actions ?? [];
-    $props = $request->props;
+    $props = $request->props ?? [];
     $methods = $request->methods ?? [];
+
+    // get listeners
+    if($actions == 'getListeners'){
+        return $linkion->getListeners();
+    }
 
     // upload a file 
     if($actions == 'upload'){
@@ -85,7 +91,7 @@ Route::post('/linkion/connection', function (Request $request) {
         
     return json_encode([
         'props' => $newProps,
-        'events' => $events,
+        'events' => $events ?: [],
         'template' => $template ,
         'result' => $result 
     ]);

@@ -2,6 +2,7 @@
 
 namespace Linkion\Core;
 
+use Linkion\Attributes\On;
 use ReflectionClass;
 
 class Linkion extends BaseLinkion {
@@ -31,7 +32,6 @@ class Linkion extends BaseLinkion {
         
         // instantiate component with matched arguments
         $this->component = $this->reflector->newInstanceArgs($args);
-        // dd($args);
         $this->sync($props);
         return $this;
     }
@@ -77,6 +77,33 @@ class Linkion extends BaseLinkion {
     public function getDispatchedEvents(){
         return $this->component->getEvents();
     }
+
+
+    public function getListeners(){
+        // TODO cache the listeners
+        $listeners = [];
+        $components = $this->getComponents();
+        foreach($components as $componentName => $class){
+            $reflection = new ReflectionClass($class);
+            foreach ($reflection->getMethods() as $method) {
+                $atts = $method->getAttributes(On::class);
+                if($atts){
+                    foreach($atts as $att){
+                        $event = $att->getArguments()[0];
+                        $listeners[] = [
+                            'event' => $event,
+                            'componentName' => $componentName,
+                            'method' => $method->getName(),
+                        ];
+                    }
+                }
+                
+            }
+        }
+        return $listeners;
+        
+    }
+
 
     
 }

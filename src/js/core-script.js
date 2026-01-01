@@ -43,7 +43,7 @@ export const coreTrait = {
         this.init();
         this.initAssets();
         this.initScripts();
-        
+        this.setListeners();
     },
 
     add(props){
@@ -62,10 +62,13 @@ export const coreTrait = {
 
     
     get(name){
+        // get component by _id
         if(this.components.has(name)) return this.components.get(name);
+
+        // get component by ref or componentName
         let comp = {};
-        if((comp = this.getComponentByProp('componentName', name)) ||
-        (comp = this.getComponentByProp('ref', name))) return comp;
+        if((comp = this.getComponentByProp('ref', name)) ||
+        (comp = this.getComponentByProp('componentName', name))) return comp;
         return null;                               
     },
 
@@ -92,7 +95,7 @@ export const coreTrait = {
 
     has(name){
         return this.components.has(name) && 
-        (this.getComponentByProp( 'componentName' ,name) || this.getComponentByProp( 'ref' ,name));   
+        (this.getComponentByProp( 'ref' ,name) || this.getComponentByProp( 'componentName' ,name));   
     },
 
     cleanInactiveComponents(){

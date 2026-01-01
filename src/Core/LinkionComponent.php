@@ -26,7 +26,7 @@ class LinkionComponent extends Component
         
     }
 
-    protected function component($view){
+    protected function component($view): View|string{
 
         $this->_id ??= 'link_' . uniqid();
         $this->getData();
@@ -54,7 +54,7 @@ class LinkionComponent extends Component
         return $props;
     }
 
-    protected $events;
+    protected $events = [];
 
     protected function dispatch($event, $detail = []){
         $this->events[] = [
