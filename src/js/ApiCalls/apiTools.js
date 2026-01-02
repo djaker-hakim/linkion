@@ -37,14 +37,21 @@ export const apiToolsTrait = {
     
     updateComponent(props){
         let ref = props.ref ? props.ref : props.componentName;
-        const component = this.get(ref)
+        const component = this.get(ref);
+        let updatedProps = [];
         Object.keys(props).forEach((key) => {
-            component[key] = props[key];
+            if(!(component[key] === props[key])){
+                component[key] = props[key];
+                updatedProps.push(key);
+            }
         });
-        this.emit('lnkn-updated', {
-            componentName: component.componentName,
-            ref: component.ref
-        });
+        if(!(updatedProps.length === 0)){
+            this.trigger('lnkn-updated', {
+                componentName: component.componentName,
+                ref: component.ref,
+                props: updatedProps
+            });
+        }
     },
 
     displayError(error){

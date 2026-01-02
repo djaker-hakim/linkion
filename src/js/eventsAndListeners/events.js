@@ -3,6 +3,24 @@
 export const eventsTrait = {
 
     
+    //-----  internal EVENTS   -----//
+
+    triggers: {},
+
+
+    on(event, callback){
+        (this.triggers[event] ??= []).push(callback);
+    },
+
+    off(event){
+        this.triggers[event] = []
+    },
+
+    trigger(event, detail = {}) {
+        (this.triggers[event] || []).forEach(cb => cb(detail));
+    },
+
+    
     //-----  external EVENTS   -----//
 
     //  send event from frontend to backend
