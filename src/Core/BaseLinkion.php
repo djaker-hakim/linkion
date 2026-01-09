@@ -11,11 +11,25 @@ class BaseLinkion {
 
     protected $path;
 
+    protected $cache;
+
+    public $cacheList;
+
     protected $baseNamespace = 'App\\View\\Components';
 
     public function __construct(){
         $this->path = app_path('View/Components');
-        $this->scan();
+        $this->cache = new LinkionCache;
+        $this->init();
+    }
+
+    protected function init(){
+        if(is_file($this->cache->getCachePath())){
+            $this->cacheList = require $this->cache->getCachePath();
+            $this->list = $this->cacheList['components'];
+            return;
+        }
+        $this->scan();    
     }
 
     public function scan(){

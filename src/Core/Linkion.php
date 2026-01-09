@@ -80,7 +80,7 @@ class Linkion extends BaseLinkion {
 
 
     public function getListeners(){
-        // TODO cache the listeners
+        if(($this->cacheList)) return $this->cacheList['listeners'];
         $listeners = [];
         $components = $this->getComponents();
         foreach($components as $componentName => $class){

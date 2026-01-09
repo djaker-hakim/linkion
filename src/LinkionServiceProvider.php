@@ -4,6 +4,8 @@ namespace Linkion;
 
 use Linkion\Console\LinkionComponentMakeCommand;
 use Illuminate\Support\ServiceProvider;
+use Linkion\Console\LinkionCacheCommand;
+use Linkion\Console\LinkionClearCommand;
 use Linkion\Core\Linkion;
 use Linkion\Core\LinkionBladeDirectives;
 
@@ -26,7 +28,9 @@ class LinkionServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
         LinkionBladeDirectives::setup();
         $this->commands([
-            LinkionComponentMakeCommand::class
+            LinkionComponentMakeCommand::class,
+            LinkionCacheCommand::class,
+            LinkionClearCommand::class
         ]);
     
     }
