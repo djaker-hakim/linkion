@@ -1,0 +1,204 @@
+<?php
+
+namespace Linkion\Console;
+
+use Illuminate\Console\Concerns\CreatesMatchingTest;
+use Illuminate\Console\GeneratorCommand;
+use Illuminate\Foundation\Inspiring;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Input\InputOption;
+
+#[AsCommand(name: 'make:linkion')]
+class LinkionComponentMakeCommand extends GeneratorCommand
+{
+    use CreatesMatchingTest;
+
+    /**
+     * The console command name.
+     *
+     * @var string
+     */
+    protected $name = 'make:linkion';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Create a new Linkion component';
+
+    /**
+     * The type of class being generated.
+     *
+     * @var string
+     */
+    protected $type = 'LinkionComponent';
+
+    /**
+     * Execute the console command.
+     *
+     * @return void
+     */
+    public function handle()
+    {
+        // if ($this->option('view')) {
+        //     return $this->writeView();
+        // }
+
+        
+        if (parent::handle() === false && ! $this->option('force')) {
+            return;
+        }
+
+        if (! ($this->option('inline') || $this->option('ghost'))) {
+            $this->writeView();
+        }
+
+    }
+
+    /**
+     * Write the view for the linkion component.
+     *
+     * @return void
+     */
+    protected function writeView()
+    {
+        $separator = '/';
+
+        if (windows_os()) {
+            $separator = '\\';
+        }
+
+        $path = $this->viewPath(
+            str_replace('.', $separator, $this->getView()).'.blade.php'
+        );
+
+        if (! $this->files->isDirectory(dirname($path))) {
+            $this->files->makeDirectory(dirname($path), 0777, true, true);
+        }
+
+        if ($this->files->exists($path) && ! $this->option('force')) {
+            $this->components->error('linkion component already exists.');
+
+            return;
+        }
+
+        file_put_contents(
+            $path,
+            '@lnknComponent
+    <!-- '.Inspiring::quotes()->random().' -->
+@endlnknComponent'
+        );
+
+        $this->components->info(sprintf('%s [%s] created successfully.', 'View', $path));
+    }
+
+    /**
+     * Build the class with the given name.
+     *
+     * @param  string  $name
+     * @return string
+     */
+    protected function buildClass($name)
+    {
+        if ($this->option('inline')) {
+            return str_replace(
+                ['DummyView', '{{ view }}'],
+                "<<<'blade'\n@lnknComponent\n    <!-- ".Inspiring::quotes()->random()." -->\n@endlnknComponent\nblade",
+                parent::buildClass($name)
+            );
+        }
+
+        if ($this->option('ghost')) {
+            return str_replace(
+                ['DummyView', '{{ view }}'],
+                "''",
+                parent::buildClass($name)
+            );
+        }
+
+        return str_replace(
+            ['DummyView', '{{ view }}'],
+            '$this->component(\''.$this->getView().'\')',
+            parent::buildClass($name)
+        );
+    }
+
+    /**
+     * Get the view name relative to the view path.
+     *
+     * @return string view
+     */
+    protected function getView()
+    {
+        $segments = explode('/', str_replace('\\', '/', $this->argument('name')));
+
+        $name = array_pop($segments);
+
+        $path = is_string($this->option('path'))
+            ? explode('/', trim($this->option('path'), '/'))
+            : [
+                'components',
+                ...$segments,
+            ];
+
+        $path[] = $name;
+
+        return (new Collection($path))
+            ->map(fn ($segment) => Str::kebab($segment))
+            ->implode('.');
+    }
+
+    /**
+     * Get the stub file for the generator.
+     *
+     * @return string
+     */
+    protected function getStub()
+    {
+        // return $this->resolveStubPath('/stubs/view-component.stub');
+        return __DIR__. '/Stubs/linkion-component.stub';
+    }
+
+    /**
+     * Resolve the fully-qualified path to the stub.
+     *
+     * @param  string  $stub
+     * @return string
+     */
+    protected function resolveStubPath($stub)
+    {
+        return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
+            ? $customPath
+            : __DIR__.$stub;
+    }
+
+    /**
+     * Get the default namespace for the class.
+     *
+     * @param  string  $rootNamespace
+     * @return string
+     */
+    protected function getDefaultNamespace($rootNamespace)
+    {
+        return $rootNamespace.'\View\Components';
+    }
+
+    /**
+     * Get the console command options.
+     *
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return [
+            ['inline', null, InputOption::VALUE_NONE, 'Create a component that renders an inline view'],
+            // ['view', null, InputOption::VALUE_NONE, 'Create an anonymous component with only a view'],
+            ['ghost', null, InputOption::VALUE_NONE, 'Create an ghost component with only a class'],
+            ['path', null, InputOption::VALUE_REQUIRED, 'The location where the component view should be created'],
+            ['force', 'f', InputOption::VALUE_NONE, 'Create the class even if the component already exists'],
+        ];
+    }
+}
