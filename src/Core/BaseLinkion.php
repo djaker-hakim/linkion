@@ -55,6 +55,11 @@ class BaseLinkion {
         return $this->list[$name];
     }
 
+    public function getComponentClass($class): ?string{
+        if(in_array($class, $this->list)) return $class;
+        return null;
+    }
+
     public function hasComponent($name): bool{
         return array_key_exists($name, $this->list);
     }
