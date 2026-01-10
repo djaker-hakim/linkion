@@ -1,11 +1,10 @@
 <?php
 
-use App\View\Components\dashboard\user;
-use App\View\Components\Test;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Linkion\Core\Linkion;
 
+// route for linkion script
 Route::get('/linkion/script', function () {
     
     $file = dirname(__DIR__).'/js/main.min.js';
@@ -13,11 +12,11 @@ Route::get('/linkion/script', function () {
 
     return response()->file($file, [
         'Content-Type' => 'application/javascript',
-        // 'Cache-Control' => 'public, max-age=604800',
+        'Cache-Control' => 'public, max-age=604800',
     ]);
     
 });
-
+// route for the linkion and alpine script
 Route::get('/linkionWithAlpine/script', function () {
     
     $file = dirname(__DIR__).'/js/main.alpine.min.js';
@@ -25,12 +24,13 @@ Route::get('/linkionWithAlpine/script', function () {
 
     return response()->file($file, [
         'Content-Type' => 'application/javascript',
-        // 'Cache-Control' => 'public, max-age=604800',
+        'Cache-Control' => 'public, max-age=604800',
     ]);
     
 });
 
-Route::post('/linkion/connection', function (Request $request) {
+// route for the linkion frontend and backend connection 
+Route::post('/linkion/connection', function (Request $request): array|bool|string {
 
         
     $linkion = new Linkion;
@@ -64,7 +64,7 @@ Route::post('/linkion/connection', function (Request $request) {
 
 
     // check for component
-    if(!$linkion->hasComponent($props['componentName'])) return json_encode("no component of this name");
+    if(!$linkion->hasComponent($props['componentName'])) return json_encode($props['componentName']." is not a linkion component");
 
     // make and sync the component
     $linkion->make($props);

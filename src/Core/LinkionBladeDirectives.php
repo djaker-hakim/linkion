@@ -4,6 +4,9 @@ namespace Linkion\Core;
 
 use Illuminate\Support\Facades\Blade;
 
+/**
+ * class for setting up Blade directives for the linkion components
+ */
 class LinkionBladeDirectives {
 
 

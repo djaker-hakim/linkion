@@ -3,14 +3,15 @@
 namespace Linkion\Console;
 
 use Illuminate\Console\Command;
-use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Routing\RouteCollection;
 use Linkion\Core\Linkion;
 use Linkion\Core\LinkionCache;
 use Symfony\Component\Console\Attribute\AsCommand;
 
-
+/**
+ * artisan command for creating a cache file for linkion components
+ * 
+ */
 #[AsCommand(name: 'linkion:cache')]
 class LinkionCacheCommand extends Command
 {

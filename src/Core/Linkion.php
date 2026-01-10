@@ -5,16 +5,32 @@ namespace Linkion\Core;
 use Linkion\Attributes\On;
 use ReflectionClass;
 
+/**
+ * this class handles the requests comming from the frontend
+ */
 class Linkion extends BaseLinkion {
 
 
     use LinkionUpload;
 
-    public $component;
+    /**
+     * linkion component instance
+     * @var LinkionComponent
+     */
+    public LinkionComponent $component;
 
+    /**
+     * reflector class instance for handeling the component
+     * @var ReflectionClass
+     */
     protected ReflectionClass $reflector;
 
-    public function make($props){
+    /**
+     * makes linkion component instance from $props
+     * @param array $props
+     * @return static
+     */
+    public function make(array $props){
         $this->reflector = new ReflectionClass(
             $this->getComponent($props['componentName'])
         );
@@ -36,6 +52,11 @@ class Linkion extends BaseLinkion {
         return $this;
     }
 
+    /**
+     * sync the frontend linkion component with backend linkion component
+     * @param mixed $props
+     * @return Linkion|null
+     */
     public function sync($props): ?static{
         if(!$this->component) return null;
         foreach($props as $prop => $value){
@@ -53,7 +74,11 @@ class Linkion extends BaseLinkion {
         return $this;
     }
 
-    public function getProps(){
+    /**
+     * return array of linkion component properties
+     * @return array
+     */
+    public function getProps(): array{
         $props = [];
         foreach($this->reflector->getProperties() as $property){
             if(
@@ -70,17 +95,33 @@ class Linkion extends BaseLinkion {
         return $props;
     }
 
-    public function run($method, $args = []){
+    /**
+     * runs the linkion component method
+     * @param string $method
+     * @param array $args
+     */
+    public function run(string $method, array $args = []){
         return $this->component->$method(...$args);
     }
 
-    public function getDispatchedEvents(){
+    /**
+     * handle linkion events
+     * @return array{detail: mixed, name: mixed[]}
+     */
+    public function getDispatchedEvents(): array{
         return $this->component->getEvents();
     }
 
 
-    public function getListeners(){
+    /**
+     * return a array of linkion event listeners
+     * @return array
+     */
+    public function getListeners(): array{
+        // get the cached listeners
         if(($this->cacheList)) return $this->cacheList['listeners'];
+        
+        // scan for the listeners
         $listeners = [];
         $components = $this->getComponents();
         foreach($components as $componentName => $class){
@@ -100,8 +141,7 @@ class Linkion extends BaseLinkion {
                 
             }
         }
-        return $listeners;
-        
+        return $listeners;   
     }
 
 

@@ -2,9 +2,15 @@
 
     namespace Linkion\Testing;
 
-
+/**
+ * remote class for the LinkionTestCase class
+ */
 class Linkion {
 
+    /**
+     * linkion testing var
+     * @var LinkionTestCase
+     */
     protected static LinkionTestCase $LINKION;
 
 

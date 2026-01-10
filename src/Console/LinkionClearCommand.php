@@ -7,6 +7,10 @@ use Illuminate\Filesystem\Filesystem;
 use Linkion\Core\LinkionCache;
 use Symfony\Component\Console\Attribute\AsCommand;
 
+/**
+ * artisan command for deleting the linkion cache file
+ * 
+ */
 #[AsCommand(name: 'linkion:clear')]
 class LinkionClearCommand extends Command
 {

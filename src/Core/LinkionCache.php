@@ -2,7 +2,9 @@
 
 namespace Linkion\Core;
 
-
+/**
+ * class for linkion cache informations (path, filename)
+ */
 class LinkionCache {
 
 

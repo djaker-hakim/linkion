@@ -10,6 +10,10 @@ use Illuminate\Support\Str;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputOption;
 
+/**
+ * artisan command that make a new linkion component
+ * just like the command make:component
+ */
 #[AsCommand(name: 'make:linkion')]
 class LinkionComponentMakeCommand extends GeneratorCommand
 {
@@ -43,11 +47,6 @@ class LinkionComponentMakeCommand extends GeneratorCommand
      */
     public function handle()
     {
-        // if ($this->option('view')) {
-        //     return $this->writeView();
-        // }
-
-        
         if (parent::handle() === false && ! $this->option('force')) {
             return;
         }
@@ -55,7 +54,6 @@ class LinkionComponentMakeCommand extends GeneratorCommand
         if (! ($this->option('inline') || $this->option('ghost'))) {
             $this->writeView();
         }
-
     }
 
     /**
@@ -158,21 +156,7 @@ class LinkionComponentMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        // return $this->resolveStubPath('/stubs/view-component.stub');
         return __DIR__. '/Stubs/linkion-component.stub';
-    }
-
-    /**
-     * Resolve the fully-qualified path to the stub.
-     *
-     * @param  string  $stub
-     * @return string
-     */
-    protected function resolveStubPath($stub)
-    {
-        return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
-            ? $customPath
-            : __DIR__.$stub;
     }
 
     /**
@@ -195,7 +179,6 @@ class LinkionComponentMakeCommand extends GeneratorCommand
     {
         return [
             ['inline', null, InputOption::VALUE_NONE, 'Create a component that renders an inline view'],
-            // ['view', null, InputOption::VALUE_NONE, 'Create an anonymous component with only a view'],
             ['ghost', null, InputOption::VALUE_NONE, 'Create an ghost component with only a class'],
             ['path', null, InputOption::VALUE_REQUIRED, 'The location where the component view should be created'],
             ['force', 'f', InputOption::VALUE_NONE, 'Create the class even if the component already exists'],

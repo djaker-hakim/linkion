@@ -11,22 +11,18 @@ use Linkion\Core\LinkionBladeDirectives;
 
 class LinkionServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
-    public function register(): void
-    {
-        //
-    }
 
     /**
      * Bootstrap any application services.
      */
     public function boot(): void
     {
-        
+        // load linkion routes
         $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
+        // loading linkion directives
         LinkionBladeDirectives::setup();
+
+        // loading linkion arisan commands
         $this->commands([
             LinkionComponentMakeCommand::class,
             LinkionCacheCommand::class,

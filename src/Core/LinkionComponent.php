@@ -2,41 +2,60 @@
 
 namespace Linkion\Core;
 
-use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 use ReflectionClass;
 
+
 class LinkionComponent extends Component
 {
-
-    public $_id;
-    public $_data;
-
-    public $ref;
-
-    public $componentCached=true;
-
+    /**
+     * linkion component view id
+     * @var string
+     */
+    public string $_id;
+    /**
+     * linkion component data
+     * @var string
+     */
+    public string $_data;
 
     /**
-     * Create a new component instance.
+     * linkion component ref (for multiple instances for the same component)
+     * @var string
      */
-    public function __construct()
-    {
-        
-    }
+    public string $ref;
 
-    protected function component($view): View|string{
+    /**
+     * this is responsible for the frontend template caching 
+     * @var bool 
+     */
+    public bool $componentCached=true;
+
+    /**
+     * setup a linkion component view
+     * @param string $view
+     * @return View|\Illuminate\Contracts\View\Factory
+     */
+    protected function component(string $view): View|string{
 
         $this->_id ??= 'link_' . uniqid();
         $this->getData();
         return view($view);        
     }
 
+    /**
+     * build the data needed for the component
+     * @return void
+     */
     protected function getData(){
         $this->_data = json_encode($this->getProps());
     }
 
+    /**
+     * get linkion component allowed properties
+     * @return array
+     */
     public function getProps(){
         $props=[];
         $ref = new ReflectionClass(static::class);
@@ -54,15 +73,29 @@ class LinkionComponent extends Component
         return $props;
     }
 
-    protected $events = [];
+    /**
+     * store linkion events
+     * @var array
+     */
+    protected array $events = [];
 
-    protected function dispatch($event, $detail = []){
+    /**
+     * dispatch a frontend event
+     * @param string $event
+     * @param array $detail
+     * @return void
+     */
+    protected function dispatch(string $event, array $detail = []){
         $this->events[] = [
             "name" => $event,
             "detail" => $detail
         ];
     }
 
+    /**
+     * get linkion events
+     * @return array
+     */
     public function getEvents(){
         return $this->events;
     }
