@@ -1,5 +1,5 @@
 
-
+// linkion component proxy
 export function componentProxy(component, linkion){
 
     return new Proxy(component, {

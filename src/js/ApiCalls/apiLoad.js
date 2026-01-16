@@ -1,4 +1,5 @@
 
+// Linkion Load method 
 export const apiLoadTrait = {
     async load(name, args = {}){
         if(this.has(name)) return Promise.resolve(this.get(name));

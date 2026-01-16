@@ -1,6 +1,7 @@
 import { componentProxy } from "./componentProxy";
 const toDotted = (name) => name.replace(/([a-z])([A-Z])/g, '$1.$2').toLowerCase();
 
+// linkion proxy
 export function linkionProxy(linkion){
     return new Proxy(linkion, {
         get(target, component){
@@ -16,10 +17,6 @@ export function linkionProxy(linkion){
         // for non existing components
         return new Proxy({}, {
             get(_, method){
-                //uploading the file
-                // if(method === 'upload'){
-                //     return (...args) => target.fileUpload(toDotted(component), ...args);
-                // }
                 // rendering the component
                 if(method === 'render'){
                     return (...args) => target.render(toDotted(component), ...args);

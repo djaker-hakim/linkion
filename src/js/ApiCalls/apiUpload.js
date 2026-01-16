@@ -1,5 +1,5 @@
 
-
+// linkion upload method
 export const apiUploadTrait = {
     progress: null,
     loading: false,

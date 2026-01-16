@@ -1,9 +1,10 @@
 
-
+// linkion Helper tools
 export const apiToolsTrait = {
     token: null,
     url: "/linkion/connection",
 
+    // returns a csrf token
     getToken(){
         this.token = !this.token ? 
         document.querySelector('[data-token]').getAttribute('data-token') : 
@@ -11,6 +12,7 @@ export const apiToolsTrait = {
         return this.token;
     },
 
+    // linkion fetch helper
     async fetch(train){
         this.token = document.querySelector('[data-token]').getAttribute('data-token');
         try{
@@ -35,6 +37,7 @@ export const apiToolsTrait = {
         }
     },
     
+    // linkion component update method
     updateComponent(props){
         let ref = props.ref ? props.ref : props.componentName;
         const component = this.get(ref);
@@ -54,6 +57,7 @@ export const apiToolsTrait = {
         }
     },
 
+    // display backend errors  
     displayError(error){
         const container = document.createElement('section');
         const div = document.createElement('div');

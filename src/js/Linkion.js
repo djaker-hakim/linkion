@@ -24,7 +24,7 @@ export class Linkion {
     static register(...traits){
         this.constructor.traits.push(...traits);
     }
-    
+    // linkion class builder
     constructor(){
         Object.assign(this, ...this.constructor.traits);
     }

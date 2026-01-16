@@ -1,21 +1,22 @@
 
-
+// linkion event handler
 export const eventsTrait = {
 
-    
     //-----  internal EVENTS   -----//
 
     triggers: {},
 
-
+    // internal event regeister
     on(event, callback){
         (this.triggers[event] ??= []).push(callback);
     },
 
+    // internal event unregister
     off(event){
         this.triggers[event] = []
     },
 
+    // internal event dispatcher
     trigger(event, detail = {}) {
         (this.triggers[event] || []).forEach(cb => cb(detail));
     },
@@ -33,7 +34,7 @@ export const eventsTrait = {
         });
     },
 
-    
+    // get backend listeners
     async setListeners(){
         const train = { 
             actions: 'getListeners'
@@ -50,6 +51,7 @@ export const eventsTrait = {
     },
 
 
+    // external event dispatcher
     dispatch(event, detail = {}){
 
         for(let listener of this.getListeners(event)){
@@ -61,17 +63,11 @@ export const eventsTrait = {
         
     },
 
-
-
     // send event from backend to frontend
-
     handleEvents(events){
-        
         events.forEach(event => {
             this.emit(event.name, event.detail);
         });
     }
 
-
-    
 }

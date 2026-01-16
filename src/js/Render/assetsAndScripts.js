@@ -1,34 +1,41 @@
+
+// linkion scripts handler
 export const assetsAndScriptsTrait = {
 
     assets: {},
     head: null,
     body: null,
-
+    // get the DOM Head element
     getHead(){
         if(!this.head) this.head = document.querySelector('head');
         return this.head; 
     },
+    // get the DOM Body element
     getBody(){
         if(!this.body) this.body = document.querySelector('body');
         return this.body; 
     },
 
+    // check if the asset exist
     assetsHas(name){
         return Object.keys(this.assets).includes(name);
     },
 
+    // return the saved asset
     assetsGet(name){
         return this.assets[name];
     },
 
+    // set the new asset
     assetsSet(name, value){
         this.assets[name] = value;
     },
 
+    // set array of assets
     assetsAdd(name, asset){
         this.assets[name].push(asset);
     },
-
+    // check if component has asset
     componentHasAsset(name, asset){
         if(this.assetsHas(name)){
             const assets = this.assetsGet(name);
@@ -41,14 +48,17 @@ export const assetsAndScriptsTrait = {
         return false;
     },
     
+    // init all element linkion assets
     initAssets(root = document){
         this.setAssets(root, true);        
     }, 
 
+    // init all linkion scripts
     initScripts(){
         this.getHead().append(...document.querySelectorAll(`script[lnkn-script]`));
     },
 
+    // handle element assets
     setAssets(root, active = false){
         const assets = root.querySelectorAll('[lnkn-asset]');
         for(let asset of assets){
@@ -69,6 +79,7 @@ export const assetsAndScriptsTrait = {
         }
     },
 
+    // set component scripts
     setScripts(id, template){
         const oldScripts = document.querySelectorAll(`script[lnkn-script=${id}]`);
         const scripts = template.querySelectorAll(`script[lnkn-script=${id}]`);
@@ -80,6 +91,7 @@ export const assetsAndScriptsTrait = {
         return template;
     },
 
+    // clear all old scripts
     cleanScripts(){
         const scripts = document.querySelectorAll('script[lnkn-script]');
         for(let script of scripts){
@@ -88,13 +100,13 @@ export const assetsAndScriptsTrait = {
         }  
     },
 
+    // reload a script
     setScriptTags(scripts, el, att){
         let newScripts = [];
         for(let script of scripts){
             const newScript = document.createElement('script');
             this.copyElement(script, newScript, att);
             script.remove();
-            // TODO Catch error and throw new error
             el.append(newScript);
             newScripts.push(newScript);
         }

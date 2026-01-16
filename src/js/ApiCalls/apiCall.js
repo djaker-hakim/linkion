@@ -1,5 +1,5 @@
 
-
+// Linkion Call Method
 export const apiCallTrait = {
     async call(name, method, args = []){
         const component = this.get(name);

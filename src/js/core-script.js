@@ -60,7 +60,11 @@ export const coreTrait = {
         return;
     },
 
-    
+    has(name){
+        return this.components.has(name) && 
+        (this.getComponentByProp( 'ref' ,name) || this.getComponentByProp( 'componentName' ,name));   
+    },
+
     get(name){
         // get component by _id
         if(this.components.has(name)) return this.components.get(name);
@@ -91,11 +95,6 @@ export const coreTrait = {
 
     removeComponentByProp(prop, value){
         this.list = this.list.filter((component) => component[prop] != value );
-    },
-
-    has(name){
-        return this.components.has(name) && 
-        (this.getComponentByProp( 'ref' ,name) || this.getComponentByProp( 'componentName' ,name));   
     },
 
     cleanInactiveComponents(){

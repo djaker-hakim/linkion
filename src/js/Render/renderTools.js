@@ -17,6 +17,7 @@ export const renderTrait = {
         return this.templates.has(name);
     },
 
+    // linkion render method
     async render(name, args = {}, el){
         const component = this.get(name);
         // template is cached
@@ -42,6 +43,7 @@ export const renderTrait = {
         }
     },
 
+    // handle component templates
     renderTemplate(component, template, el = null){
         
         // new Rendering
@@ -57,6 +59,7 @@ export const renderTrait = {
     },
 
 
+    // render a linkion component
     renderComponent(component, template, el){
         // rendering the component to the dom
         let oldTemplate = el;
@@ -93,6 +96,7 @@ export const renderTrait = {
 
     },
 
+    // rerender a linkion component
     reRenderComponent(component, template){
 
         let oldTemplate = document.querySelector(`[lnkn-id=${component._id}]`);
