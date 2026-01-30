@@ -6,8 +6,8 @@ export const apiToolsTrait = {
 
     // returns a csrf token
     getToken(){
-        this.token = !this.token ? 
-        document.querySelector('[data-token]').getAttribute('data-token') : 
+        !this.token ? 
+        this.token = document.querySelector('[data-token]').getAttribute('data-token') : 
         '';
         return this.token;
     },

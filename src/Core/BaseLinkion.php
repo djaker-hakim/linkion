@@ -31,7 +31,7 @@ class BaseLinkion {
      * cached components and listeners list
      * @var array
      */
-    public array $cacheList;
+    public $cacheList;
 
     /**
      * base namespace of linkion components

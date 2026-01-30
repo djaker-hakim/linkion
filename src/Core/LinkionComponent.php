@@ -24,7 +24,7 @@ class LinkionComponent extends Component
      * linkion component ref (for multiple instances for the same component)
      * @var string
      */
-    public string $ref;
+    public $ref;
 
     /**
      * this is responsible for the frontend template caching 

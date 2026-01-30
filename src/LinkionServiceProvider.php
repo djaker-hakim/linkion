@@ -19,6 +19,9 @@ class LinkionServiceProvider extends ServiceProvider
     {
         // load linkion routes
         $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
+        // loading linkion script
+        $this->loadViewsFrom([__DIR__ . '/views'], 'linkion');
+       
         // loading linkion directives
         LinkionBladeDirectives::setup();
 
