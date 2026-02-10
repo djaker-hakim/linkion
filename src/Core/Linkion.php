@@ -96,6 +96,50 @@ class Linkion extends BaseLinkion {
     }
 
     /**
+     * get applicable middleware on method
+     * @param mixed $method
+     * @return array
+     */
+    public function getTargetMiddleware($method)
+    {
+        $middleware = $this->component->getMiddleware();
+        
+        $applicable = [];
+        
+        foreach ($middleware as $m) {
+            // Check if this middleware should run for this method
+            if ($this->methodExcludedByOptions($method, $m['options'])) {
+                continue;  // Skip this middleware
+            }
+            
+            $applicable[] = $m['middleware'];
+        }
+        
+        return $applicable;
+    }
+
+    /**
+     * Check if middleware has method in options
+     * @param mixed $method
+     * @param mixed $options
+     * @return bool
+     */
+    public function methodExcludedByOptions($method, $options){
+        // If 'only' is set, check if method is in the list
+        if (isset($options['only'])) {
+            return !in_array($method, (array) $options['only']);
+        }
+        
+        // If 'except' is set, check if method is in the list
+        if (isset($options['except'])) {
+            return in_array($method, (array) $options['except']);
+        }
+        
+        // No restrictions, middleware applies
+        return false;
+    }
+
+    /**
      * runs the linkion component method
      * @param string $method
      * @param array $args

@@ -29,8 +29,8 @@ export const renderTrait = {
         // fetching the template
         const train = { 
             props: component ? component : {componentName: name, ...args},
-            methods: {},
-            actions: 'render'
+            method: {name: 'render'},
+            action: 'render'
         };
         try{
             const data = await this.fetch(train);

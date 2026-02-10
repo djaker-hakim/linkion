@@ -4,6 +4,7 @@ namespace Linkion\Core;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use Linkion\Middleware\LinkionMiddlewareOptions;
 use ReflectionClass;
 
 
@@ -31,6 +32,37 @@ class LinkionComponent extends Component
      * @var bool 
      */
     public bool $componentCached=true;
+
+    /**
+     * this is the components middlewares
+     * @var array
+     */
+    protected $middleware = [];
+
+   
+    /**
+     * registers components middlewares
+     * @param mixed $middleware
+     * @param array $options
+     * @return LinkionMiddlewareOptions
+     */
+    protected function middleware($middleware, array $options = []): LinkionMiddlewareOptions
+    {
+        foreach ((array) $middleware as $m) {
+            $this->middleware[] = [
+                'middleware' => $m,
+                'options' => &$options,
+            ];
+        }
+        
+        return new LinkionMiddlewareOptions($options);
+    }
+
+    public function getMiddleware(): array
+    {        
+       return $this->middleware;
+    }
+
 
     /**
      * setup a linkion component view

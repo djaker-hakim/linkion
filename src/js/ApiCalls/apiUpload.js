@@ -10,10 +10,14 @@ export const apiUploadTrait = {
         const formData = new FormData;
         const component = this.get(name);
 
-        formData.append('actions', 'upload');
+        // throw error if component does not exist in the frontend
+        if(!component) throw new Error('the linkion component ' + name + ' does not exist or is not loaded yet');
+
         formData.append('_token', this.getToken()); // important for 419 fix
+        formData.append('action', 'upload');
         formData.append('props', JSON.stringify({
-            componentName: component ? component.componentName : name ,
+            componentName: component.componentName ,
+            ref: component.ref,
             prop: prop 
         }));
         
@@ -40,7 +44,8 @@ export const apiUploadTrait = {
                 this.emit('upload-progress', 
                     { 
                         progress: this.progress,
-                        component: component ? component : { componentName: name } 
+                        componentName: component.componentName,
+                        ref: component.ref
                     });
             }
         });
@@ -49,7 +54,6 @@ export const apiUploadTrait = {
             if(xhr.status == 200){
                 obj = JSON.parse(xhr.responseText);
                 this.updateComponent(obj.props);
-                console.log(this.get(obj.props.componentName));
             }else{
                 this.displayError(xhr.responseText);
             }
@@ -57,7 +61,7 @@ export const apiUploadTrait = {
         }
 
         xhr.onerror = () => {
-            console.error('error');
+            // console.error('error'); // TODO 
         }
 
         xhr.send(formData);

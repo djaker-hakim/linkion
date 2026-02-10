@@ -4,7 +4,7 @@ export const onUpdateTrait = {
 
     onUpdate(name, callback, prop = '_all_'){
         this.on('lnkn-updated', (detail) => {
-            let { componentName, ref, props } = detail;
+            const { componentName, ref, props } = detail;
 
             let status;
             const component = linkion.get(name);
@@ -13,7 +13,17 @@ export const onUpdateTrait = {
             component.ref ?
             status = component.ref == ref :
             status = component.componentName == componentName;
-            if(status && (props.includes(prop) || prop == '_all_')) callback(detail)                
+            // watching for all props
+            if(status && prop == '_all_'){
+                callback(props);
+                return;
+            } 
+            // watching for spicific prop
+            if(status && Object.keys(props).includes(prop)) 
+            {
+                callback(props[prop]);
+                return;
+            }
         });
     }
 

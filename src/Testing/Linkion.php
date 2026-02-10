@@ -13,12 +13,14 @@ class Linkion {
      */
     protected static LinkionTestCase $LINKION;
 
-
-    public static function __callStatic($method, $args){
-        static::$LINKION = new LinkionTestCase();
-        return static::$LINKION->$method(...$args);
+    /**
+     * initiate the testing process
+     * @param string $component
+     * @param array $args
+     * @return LinkionTestCase
+     */
+    public static function test(string $component, array $args = []): LinkionTestCase{
+        return (new LinkionTestCase())->test($component, $args);
     }
-
-
 
 }

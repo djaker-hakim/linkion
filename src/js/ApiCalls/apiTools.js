@@ -41,11 +41,11 @@ export const apiToolsTrait = {
     updateComponent(props){
         let ref = props.ref ? props.ref : props.componentName;
         const component = this.get(ref);
-        let updatedProps = [];
+        const updatedProps = {};
         Object.keys(props).forEach((key) => {
             if(!(component[key] === props[key])){
                 component[key] = props[key];
-                updatedProps.push(key);
+                updatedProps[key] = component[key];
             }
         });
         if(!(updatedProps.length === 0)){

@@ -6,8 +6,8 @@ export const apiLoadTrait = {
 
         const train = { 
                 props: {componentName: name, ...args},
-                methods: {},
-                actions:{}
+                method: {},
+                action:{}
             }
         try{
             const data = await this.fetch(train); // parse JSON response

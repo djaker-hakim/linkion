@@ -37,7 +37,7 @@ export const eventsTrait = {
     // get backend listeners
     async setListeners(){
         const train = { 
-            actions: 'getListeners'
+            action: 'getListeners'
         };
 
         try{

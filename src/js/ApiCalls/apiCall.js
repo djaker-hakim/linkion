@@ -5,11 +5,11 @@ export const apiCallTrait = {
         const component = this.get(name);
         const train = { 
             props: component,
-            methods: {
-                method: method,
+            method: {
+                name: method,
                 args: args
             },
-            actions: {}
+            action: {}
         };
         try{
             const data = await this.fetch(train);
