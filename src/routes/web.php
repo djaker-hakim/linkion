@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\Route;
 use Linkion\Core\Linkion;
 
@@ -34,17 +35,15 @@ Route::post('/linkion/connection', function (Request $request): array|bool|strin
 
         
     $linkion = new Linkion;
-    $actions = $request->actions ?? [];
-    $props = $request->props ?? [];
-    $methods = $request->methods ?? [];
+    $action = $request->input('action', '');
+    $props = $request->input('props', []);
+    $method = $request->input('method', []);
 
     // get listeners
-    if($actions == 'getListeners'){
-        return $linkion->getListeners();
-    }
+    if($action == 'getListeners') return $linkion->getListeners();
 
     // upload a file 
-    if($actions == 'upload'){
+    if($action == 'upload'){
         $props = json_decode($props, true);
         $files = $request->file($props['prop']);
         if(is_array($files)){
@@ -57,12 +56,12 @@ Route::post('/linkion/connection', function (Request $request): array|bool|strin
         }
         $newProps = [
             'componentName' => $props['componentName'],
+            'ref' => $props['ref'],
             $props['prop'] => $newFile
         ];
         return json_encode(['props' => $newProps, 'result' => null ]);
     }
-
-
+        
     // check for component
     if(!$linkion->hasComponent($props['componentName'])) return json_encode($props['componentName']." is not a linkion component");
 
@@ -71,17 +70,35 @@ Route::post('/linkion/connection', function (Request $request): array|bool|strin
     
     // run the logic
     $result = null;
-    if(!empty($methods)){
-        $result = $linkion->run($methods['method'], $methods['args']);
-    }
+    $template = null;
+
+    // check for any middlewares
+    $pipeline = new Pipeline(app());
+    $pipeline->send($request)
+    ->through($linkion->getTargetMiddleware($method['name']))
+    ->then(function() use ($method, $action, &$template, &$result, &$linkion) {
+        if($action == 'render' || !$linkion->component->componentCached){
+            $template = $linkion->run($method['name'])
+            ->with($linkion->component->data())
+            ->render();
+        }else{
+            $result = $linkion->run($method['name'], $method['args']);
+        }   
+    });
+    
+    // run the logic
+    // $result = null;
+    // if(!empty($methods)){
+    //     $result = $linkion->run($methods['method'], $methods['args']);
+    // }
 
     // render the template
-    $template = null;
-    if($actions == 'render' || !$linkion->component->componentCached){
-        $template = $linkion->run('render')
-        ->with($linkion->component->data())
-        ->render();
-    }
+    
+    // if($actions == 'render' || !$linkion->component->componentCached){
+    //     $template = $linkion->run('render')
+    //     ->with($linkion->component->data())
+    //     ->render();
+    // }
         
     $newProps = $linkion->getProps();
 
