@@ -1,5 +1,41 @@
 # Linkion
 
+# Linkion Documentation Summary
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Why Linkion?](#why-linkion)
+- [Installation](#installation)
+- [How to Setup linkion](#how-to-setup-linkion)
+- [Creating a Linkion Component](#creating-a-linkion-component)
+- [How to Use](#how-to-use)
+  - [Option 1: Access by Component Name](#option-1-access-by-component-name)
+  - [Option 2: Access by Reference (ref)](#option-2-access-by-reference-ref)
+- [Using Linkion Components with Alpinejs](#using-linkion-components-with-alpinejs)
+- [Calling Backend Methods from the Frontend](#calling-backend-methods-from-the-frontend)
+- [File Uploads](#file-uploads)
+- [Upload Progress](#upload-progress)
+- [Rendering Modes](#rendering-modes)
+  - [Nested Components](#nested-components-behavior)
+- [Ghost Components](#ghost-components)
+- [Loading vs Rendering Components](#loading-vs-rendering-components)
+- [Reactivity](#reactivity)
+  - [`watch` Method](#watching-specific-properties)
+- [Blade Directives](#blade-directives)
+- [Events](#events)
+  - [Backend → Frontend](#backend-to-frontend-events)
+  - [Frontend → Backend](#frontend-to-backend-events)
+- [Middleware](#middleware)
+- [Testing](#testing)
+- [Loading Components from a Service Provider](#loading-components-from-a-service-provider)
+- [Linkion in Production](#linkion-in-production)
+- [Conclusion](#conclusion)
+
+
+
+## Introduction
+
 **Linkion** is a Laravel package designed to connect the backend and the frontend in a clean, direct, and surprisingly civilized way.
 
 Instead of shouting across HTTP endpoints all day, Linkion introduces **Linkion Components**—a structured bridge that allows frontend code to call backend logic as if they were already on speaking terms.
@@ -191,9 +227,9 @@ console.log(linkion.mainCounter);      // Access mainCounter
 console.log(linkion.secondaryCounter); // Access secondaryCounter
 ```
 
-### Using Linkion Components with Alpine.js
+### Using Linkion Components with Alpinejs
 
-When using **Alpine.js**, Linkion provides a **magic `$lnkn` object** inside your component.  
+When using **Alpine.js**, Linkion provides a **magic `$lnkn` object** inside your Alpine component.  
 This allows your frontend Alpine instance to directly interact with the Linkion component’s backend state and methods.
 
 ```html
@@ -252,7 +288,7 @@ When using Alpine, the magic `$lnkn` object gives you access to the same backend
 > Only **public properties** and **public methods** of a Linkion component are accessible from the frontend.  
 > Private or protected properties and methods cannot be accessed, ensuring encapsulation and security.
 
-## Uploading Files
+## File Uploads
 
 Linkion makes uploading files from the frontend simple and straightforward. You can upload single or multiple files directly to your Linkion component.
 
@@ -313,7 +349,7 @@ public function save()
 > For more information about file storage in Laravel, check out the [complete file storage documentation](https://laravel.com/docs/12.x/filesystem).
 
 
-### Upload Progress Tracking
+### Upload Progress
 
 Linkion also provides access to **upload progress events**, allowing you to track file upload status in real time.
 
@@ -525,7 +561,7 @@ linkion.load('counter', { ref: 'mainCounter' });
 linkion.mainCounter.render({}, el);
 ```
 
-## Reactivity with `onUpdate`
+## Reactivity
 
 If you need reactivity in Linkion, you can listen for component updates using the `onUpdate` method.
 
@@ -888,6 +924,49 @@ If you update components, add new ones, or change configuration, you should clea
 php artisan linkion:clear
 ```
 This forces Linkion to rebuild components on the next request.
+
+## Loading Components from a Service Provider
+
+You can load Linkion components from a service provider, which is useful for package development or reusable component libraries.
+
+---
+
+### Example Service Provider
+
+```php
+use App\Linkion\Counter;
+use Linkion\Core\Linkion;
+use Illuminate\Support\ServiceProvider;
+
+class AppServiceProvider extends ServiceProvider
+{
+    public function boot(): void
+    {
+        // Register the Linkion component
+        Linkion::component('counter', Counter::class);
+
+        // Load the component's views
+        $this->loadViewsFrom(__DIR__ . '/views/linkion', 'lnkn');
+    }
+}
+```
+### Component example
+
+```php
+use Linkion\Core\LinkionComponent;
+use Illuminate\Contracts\View\View;
+use Closure;
+
+class Counter extends LinkionComponent
+{
+    public function render(): View|Closure|string
+    {
+        // Link the component to its view
+        $this->component(view: 'lnkn::components.counter');
+    }
+}
+```
+> **Note:** Just like in Laravel, if your Linkion component has a view, you must load the view in your service provider using `$this->loadViewsFrom()`. Registering the component with `Linkion::component()` makes it available globally by its name. This approach is especially useful for package development, where components need to be reusable across different applications.
 
 ## Conclusion
 
