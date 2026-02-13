@@ -2,6 +2,7 @@
 
 namespace Linkion\Core;
 
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\File;
 use ReflectionClass;
 
@@ -14,7 +15,7 @@ class BaseLinkion {
      * list of linkion components
      * @var array
      */
-    public array $list;
+    public array $list = [];
 
     /**
      * path of linkion components
@@ -38,13 +39,19 @@ class BaseLinkion {
      * @var string
      */
     protected string $baseNamespace = 'App\\View\\Components';
+    /**
+     * user loaded components
+     * @var array
+     */
+    protected static $loadedComponents = [];
 
     public function __construct(){
-        $this->path = app_path('View/Components');
+        $this->path = app_path('View'. DIRECTORY_SEPARATOR .'Components');
         $this->cache = new LinkionCache;
         $this->init();
     }
 
+    
     /**
      * init the linkion components
      * @return void
@@ -55,7 +62,18 @@ class BaseLinkion {
             $this->list = $this->cacheList['components'];
             return;
         }
-        $this->scan();    
+        $this->registerLoadedComponents();
+        $this->scan();
+    }
+
+    /**
+     * register user loaded components
+     * @return void
+     */
+    public function registerLoadedComponents(): void{
+        foreach(static::$loadedComponents as $componentName => $class){
+            $this->register($componentName, $class);
+        }
     }
 
     /**
@@ -78,9 +96,9 @@ class BaseLinkion {
             if (!class_exists($class)) continue;
 
             // register component
-            $this->register($componentName, $class);
-            
+            $this->register($componentName, $class);   
         }
+        
     }
 
     /**
@@ -95,6 +113,18 @@ class BaseLinkion {
         if ($ref->isSubclassOf(LinkionComponent::class) && !$ref->isAbstract()) {
             $this->list[$componentName] = $class;
         }
+    }
+
+
+    /**
+     * user load a linkion component
+     * @param string $componentName
+     * @param string $class
+     * @return void
+     */
+    public static function component(string $componentName, string $class){
+        Blade::component($componentName, $class);
+        static::$loadedComponents[$componentName] = $class;
     }
 
     /**

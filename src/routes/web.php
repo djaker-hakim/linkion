@@ -85,21 +85,7 @@ Route::post('/linkion/connection', function (Request $request): array|bool|strin
             $result = $linkion->run($method['name'], $method['args']);
         }   
     });
-    
-    // run the logic
-    // $result = null;
-    // if(!empty($methods)){
-    //     $result = $linkion->run($methods['method'], $methods['args']);
-    // }
-
-    // render the template
-    
-    // if($actions == 'render' || !$linkion->component->componentCached){
-    //     $template = $linkion->run('render')
-    //     ->with($linkion->component->data())
-    //     ->render();
-    // }
-        
+            
     $newProps = $linkion->getProps();
 
     // check for dispatched events
