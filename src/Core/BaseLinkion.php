@@ -81,7 +81,7 @@ class BaseLinkion {
      * @return void
      */
     public function scan(){
-        
+        if(!is_dir($this->path)) return;
         foreach (File::allFiles($this->path) as $file) {
             $relative = str_replace(['/', '.php'], ['\\', ''], $file->getRelativePathname());
             $class = $this->baseNamespace . '\\' . $relative;

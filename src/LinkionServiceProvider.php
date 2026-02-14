@@ -6,7 +6,6 @@ use Linkion\Console\LinkionComponentMakeCommand;
 use Illuminate\Support\ServiceProvider;
 use Linkion\Console\LinkionCacheCommand;
 use Linkion\Console\LinkionClearCommand;
-use Linkion\Core\Linkion;
 use Linkion\Core\LinkionBladeDirectives;
 
 class LinkionServiceProvider extends ServiceProvider

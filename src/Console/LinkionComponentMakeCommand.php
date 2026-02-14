@@ -31,7 +31,7 @@ class LinkionComponentMakeCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $description = 'Create a new Linkion component';
+    protected $description = 'Create a new linkion component';
 
     /**
      * The type of class being generated.
