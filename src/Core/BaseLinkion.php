@@ -4,6 +4,7 @@ namespace Linkion\Core;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use ReflectionClass;
 
 /**
@@ -83,22 +84,25 @@ class BaseLinkion {
     public function scan(){
         if(!is_dir($this->path)) return;
         foreach (File::allFiles($this->path) as $file) {
-            $relative = str_replace(['/', '.php'], ['\\', ''], $file->getRelativePathname());
-            $class = $this->baseNamespace . '\\' . $relative;
+            
+            // Strip base path and extension
+            $relative = str_replace(DIRECTORY_SEPARATOR, '\\', $file->getRelativePathname());
+            $path = str_replace('.php', '', $relative);
+            
+            // Dot notation
+            $segments = explode(DIRECTORY_SEPARATOR, $path);
+            $segments = array_map(fn($s) => Str::kebab($s), $segments);
+            $component = implode('.', $segments);
 
-            // get the componentName
-            $relativePath = str_replace('.php', '', $file->getRelativePathname());
-            $relativePath = ltrim($relativePath, '/');
-            $componentName = strtolower(str_replace('\\', '.', $relativePath));
-
-
+            // Class
+            $class = $this->baseNamespace . '\\' . $path;
+                        
             // check if subclass of LinkionComponent
             if (!class_exists($class)) continue;
 
             // register component
-            $this->register($componentName, $class);   
-        }
-        
+            $this->register($component, $class);   
+        }   
     }
 
     /**

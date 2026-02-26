@@ -19,7 +19,6 @@
 - [Rendering Modes](#rendering-modes)
   - [Nested Components](#nested-components-behavior)
 - [Ghost Components](#ghost-components)
-- [Loading vs Rendering Components](#loading-vs-rendering-components)
 - [Reactivity](#reactivity)
   - [`watch` Method](#watching-specific-properties)
 - [Blade Directives](#blade-directives)
@@ -538,28 +537,6 @@ Even though the component is not visible in the DOM, it is fully accessible:
 linkion.mainCounter.count; // Output: 1
 ```
 The component behaves like any other Linkion component it simply has no visual representation.
-
-### Loading vs Rendering Components
-
-The `load` method does more than create ghost components.
-
-When a component is loaded using `load`, Linkion initializes the component **even if it has a template**, but the template is **not rendered** immediately.
-
-In other words, the component is:
-- Created and initialized
-- Available on the frontend
-- Fully functional
-- Not rendered in the DOM
-
-To render a previously loaded component, you must explicitly call the `render` method.  
-When rendered this way, the component is rendered in **Client-Side Rendering (CSR)** mode.
-
-```js
-linkion.load('counter', { ref: 'mainCounter' });
-
-// Later...
-linkion.mainCounter.render({}, el);
-```
 
 ## Reactivity
 

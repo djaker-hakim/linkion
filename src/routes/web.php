@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\Route;
+use Linkion\Core\Exceptions\LinkionException;
 use Linkion\Core\Linkion;
 
 // route for linkion script
@@ -63,8 +64,8 @@ Route::post('/linkion/connection', function (Request $request): array|bool|strin
     }
         
     // check for component
-    if(!$linkion->hasComponent($props['componentName'])) return json_encode($props['componentName']." is not a linkion component");
-
+    if(!$linkion->hasComponent($props['componentName'])) throw new LinkionException($props['componentName']." is not a linkion component");
+    
     // make and sync the component
     $linkion->make($props);
     
@@ -72,19 +73,21 @@ Route::post('/linkion/connection', function (Request $request): array|bool|strin
     $result = null;
     $template = null;
 
-    // check for any middlewares
-    $pipeline = new Pipeline(app());
-    $pipeline->send($request)
-    ->through($linkion->getTargetMiddleware($method['name']))
-    ->then(function() use ($method, $action, &$template, &$result, &$linkion) {
-        if($action == 'render' || !$linkion->component->componentCached){
-            $template = $linkion->run($method['name'])
-            ->with($linkion->component->data())
-            ->render();
-        }else{
-            $result = $linkion->run($method['name'], $method['args']);
-        }   
-    });
+    if(!count($method) == 0){
+        // check for any middlewares
+        $pipeline = new Pipeline(app());
+        $pipeline->send($request)
+        ->through($linkion->getTargetMiddleware($method['name']))
+        ->then(function() use ($method, $action, &$template, &$result, &$linkion) {
+            if($action == 'render'){
+                $template = $linkion->run($method['name'])
+                ->with($linkion->component->data())
+                ->render();
+            }else{
+                $result = $linkion->run($method['name'], $method['args']);
+            }   
+        });
+    }
             
     $newProps = $linkion->getProps();
 
