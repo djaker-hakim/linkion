@@ -12,9 +12,9 @@ class LinkionComponent extends Component
 {
     /**
      * linkion component view id
-     * @var string
+     * @var string|null
      */
-    public string $_id;
+    public ?string $_id = null;
     /**
      * linkion component data
      * @var string
@@ -31,7 +31,7 @@ class LinkionComponent extends Component
      * this is responsible for the frontend template caching 
      * @var bool 
      */
-    public bool $componentCached=true;
+    public $componentCached=true;
 
     /**
      * this is the components middlewares

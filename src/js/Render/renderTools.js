@@ -4,7 +4,7 @@ export const renderTrait = {
     templates: new Map(),
 
     addTemplate(component, template){
-        if(!this.hasTemplate(component.componentName)){
+        if(component.componentCached && !this.hasTemplate(component.componentName)){
             this.templates.set(component.componentName, template);
         } 
     },
@@ -21,10 +21,10 @@ export const renderTrait = {
     async render(name, args = {}, el){
         const component = this.get(name);
         // template is cached
-        if(component && this.hasTemplate(name)){
+        if(component && this.hasTemplate(component.componentName)){
             return Promise.resolve(
-                this.renderTemplate(component, this.getTemplate(name), el)
-            );
+                this.renderTemplate(component, this.getTemplate(component.componentName), el)
+            );   
         }
         // fetching the template
         const train = { 
@@ -46,6 +46,9 @@ export const renderTrait = {
     // handle component templates
     renderTemplate(component, template, el = null){
         
+        // caching
+        this.addTemplate(component, template);
+        
         // new Rendering
         if(el) return this.renderComponent(component, template, el);
 
@@ -53,8 +56,7 @@ export const renderTrait = {
         if(document.querySelector(`[lnkn-id=${component._id}]`)
         ) return this.reRenderComponent(component, template);
 
-        // caching
-        return this.addTemplate(component, template);
+        
 
     },
 
@@ -67,7 +69,7 @@ export const renderTrait = {
         newTemplate.innerHTML = template;
         
         // register for nested component
-        this.init(newTemplate);
+        this.initElement(newTemplate);
         
         //scan for new components
         let comps = newTemplate.querySelectorAll('[lnkn-id]');
@@ -104,7 +106,7 @@ export const renderTrait = {
         newTemplate.innerHTML = template;
 
         // register for nested component
-        this.init(newTemplate);
+        this.initElement(newTemplate);
         
         // scan for new nested component
         let comps = newTemplate.querySelectorAll('[lnkn-id]');

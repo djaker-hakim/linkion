@@ -7,18 +7,50 @@ export const eventsTrait = {
     triggers: {},
 
     // internal event regeister
-    on(event, callback){
-        (this.triggers[event] ??= []).push(callback);
+    on(ref, event, callback){
+        let id = null
+        if(this.has(ref)){
+            if(!this.triggers[ref]) this.triggers[ref] = {};
+            if(!this.triggers[ref][event]) this.triggers[ref][event] = new Map();
+            id = crypto.randomUUID();
+            this.triggers[ref][event].set(id, callback);
+        }
+        return id;
     },
 
     // internal event unregister
-    off(event){
-        this.triggers[event] = []
+    off(ref, event = null, id = null){
+        if(this.has(ref) && !event){
+            delete this.triggers[ref];
+            return null;
+        } 
+        if(this.has(ref) && this.triggers[ref][event]){
+           if(id){
+                this.triggers[ref][event].has(id) ? 
+                this.triggers[ref][event].delete(id) :
+                '';
+           }else {
+                this.triggers[ref][event] = null;
+           }
+        }
+    },
+
+    offId(id){
+        for(let ref of Object.keys(this.triggers)){
+            for(let event of Object.keys(this.triggers[ref])){
+                this.triggers[ref][event].has(id) ? 
+                this.triggers[ref][event].delete(id) :
+                '';
+            }
+        }
     },
 
     // internal event dispatcher
     trigger(event, detail = {}) {
-        (this.triggers[event] || []).forEach(cb => cb(detail));
+        for(let ref of Object.keys(this.triggers)){
+            if(!this.triggers[ref][event]) continue;
+            this.triggers[ref][event].forEach(cb => cb(detail));
+        }
     },
 
     

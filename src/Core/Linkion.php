@@ -60,6 +60,8 @@ class Linkion extends BaseLinkion {
     public function sync($props): ?static{
         if(!$this->component) return null;
         foreach($props as $prop => $value){
+            // check if class has property
+            if(!$this->reflector->hasProperty($prop)) continue;
             $property = $this->reflector->getProperty($prop);
             if(is_array($value)){
                 if(static::isLnknFile($value)){
