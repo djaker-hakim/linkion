@@ -39,8 +39,11 @@ export const coreTrait = {
         this.add(component);
         this.addTemplate(component, el.outerHTML);
         
+        // remove the lnkn-data attribute
+        el.removeAttribute('lnkn-data')
+        
         // Emit per-component event
-        this.emit('linkion:component:init', { el, component});
+        // this.emit('linkion:component:init', { el, component});
     },
 
     // Initialize on DOM ready
