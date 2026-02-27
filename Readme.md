@@ -460,7 +460,7 @@ Rendering behavior differs when components are nested.
 
 In SSR mode, nested components **do not preserve state**.
 
-Each time a parent component is re-rendered, all nested components are rebuilt from scratch—similar to a full server-side re-render.
+Each time a parent component is re-rendered, all nested components are rebuilt from scratch even if the nested component are in mode CSR similar to a full server-side re-render.
 
 ### CSR Nested Components
 

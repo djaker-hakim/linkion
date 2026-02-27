@@ -112,14 +112,15 @@ export const coreTrait = {
         const duplicateRefs = this.list.filter(comp => refCount[comp.ref] > 1);
 
         // remove inactive components
+
+        // delete inactive components 
         for(let key of this.components.keys()){
-            if(key && !ids.includes(key)){
-                this.components.delete(key); // delete inactive component                
-                for(let comp of duplicateRefs){
-                    !this.components.has(comp._id) ? this.removeComponentByProp('_id', key): ''; // filter inactive components
-                }
-            }     
+            if(key && !ids.includes(key)) this.components.delete(key)        
         }
+        // filter inactive components
+        for(let comp of duplicateRefs){
+            !this.components.has(comp._id) ? this.removeComponentByProp('_id', comp._id): ''; 
+        }   
     },
 }
 
