@@ -4,9 +4,11 @@ import { apiLoadTrait } from './ApiCalls/apiLoad';
 import { apiCallTrait } from './ApiCalls/apiCall';
 import { apiUploadTrait } from './ApiCalls/apiUpload';
 import { renderTrait } from './Render/renderTools';
-import { assetsAndScriptsTrait } from './Render/assetsAndScripts';
 import { eventsTrait } from './eventsAndListeners/events';
 import { onUpdateTrait } from './watchers/onUpdate';
+import { assetsTrait } from './Render/assets';
+import { scriptsTrait } from './Render/scripts';
+import { scriptToolsTrait } from './Render/script-tools';
 
 export class Linkion {
     static traits = [
@@ -16,7 +18,9 @@ export class Linkion {
         apiLoadTrait,
         apiUploadTrait,
         renderTrait,
-        assetsAndScriptsTrait,
+        assetsTrait,
+        scriptsTrait,
+        scriptToolsTrait,
         eventsTrait,
         onUpdateTrait
     ];

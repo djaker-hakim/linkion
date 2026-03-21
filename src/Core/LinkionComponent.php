@@ -81,7 +81,7 @@ class LinkionComponent extends Component
      * @return void
      */
     protected function getData(){
-        $this->_data = json_encode($this->getProps());
+        $this->_data = htmlspecialchars(json_encode($this->getProps()));
     }
 
     /**
