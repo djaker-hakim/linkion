@@ -17,7 +17,7 @@ trait LinkionUpload {
      */
     public static function isLnknFiles(array $files): bool{
         foreach($files as $file){
-            $status = static::isLnknFile($file);
+            $status = is_array($file) && static::isLnknFile($file);
             if(!$status) return false;
         }
         return true;
