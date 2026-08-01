@@ -4,6 +4,7 @@ namespace Linkion\Core;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use Linkion\Core\Exceptions\LinkionException;
 use Linkion\Middleware\LinkionMiddlewareOptions;
 use ReflectionClass;
 
@@ -98,8 +99,17 @@ class LinkionComponent extends Component
                     $property->getName(), 
                     ['_data', 'attributes']
                 ) 
-            ){
-                $props[$property->getName()] = $property->getValue($this);
+            )
+            {
+                $type = $property->getType();
+                // dd($type);
+                if($type && !in_array($type->getName(),['int', 'string', 'array', 'bool', 'float'])){
+                    throw new LinkionException("property type {$type} not supported");
+                }
+                
+                $property->isInitialized($this) ?
+                $props[$property->getName()] = $property->getValue($this) :
+                $props[$property->getName()] = null;   
             }
         }
         return $props;
