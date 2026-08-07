@@ -18,6 +18,7 @@ export const apiToolsTrait = {
         try{
             const response = await fetch(this.url, {
                 method: "POST",
+                credentials: 'same-origin',
                 headers: {
                     "X-CSRF-TOKEN": this.token,
                     'Accept': 'application/json',
