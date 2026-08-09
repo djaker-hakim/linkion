@@ -60,7 +60,7 @@ Route::post('/linkion/connection', function (Request $request): array|bool|strin
             'ref' => $props['ref'],
             $props['prop'] => $newFile
         ];
-        return json_encode(['props' => $newProps, 'result' => null ]);
+        return response()->json(['props' => $newProps, 'result' => null ])->getContent();
     }
         
     // check for component
@@ -95,11 +95,12 @@ Route::post('/linkion/connection', function (Request $request): array|bool|strin
     $events = $linkion->getDispatchedEvents();
 
         
-    return json_encode([
+    $response = response()->json([
         'props' => $newProps,
         'events' => $events ?: [],
         'template' => $template ,
         'result' => $result 
     ]);
+    return $response->getContent();
 
 })->middleware('web');
