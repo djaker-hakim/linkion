@@ -26,7 +26,6 @@ export const apiToolsTrait = {
                 },
                 body: JSON.stringify(train)
             });
-            
             if (!response.ok) {
                 const data = await response.text();
                 return this.displayError(data); // display the error
@@ -34,7 +33,8 @@ export const apiToolsTrait = {
             return await response.json(); // parse JSON response
 
         } catch(e) {
-            return e
+            console.error('fetch went wrong: ' + e);
+            return [];
         }
     },
     
