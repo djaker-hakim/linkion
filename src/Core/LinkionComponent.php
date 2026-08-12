@@ -64,6 +64,11 @@ class LinkionComponent extends Component
        return $this->middleware;
     }
 
+    
+    public function init(){
+
+    }
+
 
     /**
      * setup a linkion component view
@@ -71,7 +76,7 @@ class LinkionComponent extends Component
      * @return View|\Illuminate\Contracts\View\Factory
      */
     protected function component(string $view): View|string{
-
+        $this->init();
         $this->_id ??= 'link_' . uniqid();
         $this->getData();
         return view($view);        

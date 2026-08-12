@@ -9,9 +9,9 @@ use Linkion\Core\LinkionComponent;
 class {{ class }} extends LinkionComponent
 {
     /**
-     * Create a new linkion component instance.
+     * init the linkion component.
      */
-    public function __construct()
+    public function init()
     {
         //
     }
